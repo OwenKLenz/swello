@@ -1,14 +1,14 @@
 const Board = require("../models/board");
+const List = require("../models/list");
 const HttpError = require("../models/httpError");
 const { validationResult } = require("express-validator");
 
 const getBoards = (req, res, next) => {
-  Board.find({}, "title _id createdAt updatedAt")
-    .then(boards => {
-      res.json({
-        boards,
-      })
-    })
+  Board.find({}, "title _id createdAt updatedAt").then((boards) => {
+    res.json({
+      boards,
+    });
+  });
 };
 
 const createBoard = (req, res, next) => {
@@ -16,9 +16,12 @@ const createBoard = (req, res, next) => {
   if (errors.isEmpty()) {
     Board.create(req.body)
       .then((board) => {
-        Board.find({ _id: board._id }, "title _id createdAt updatedAt").then(board => res.json({ board }))
+        Board.find(
+          { _id: board._id },
+          "title _id createdAt updatedAt"
+        ).then((board) => res.json({ board }));
       })
-      .catch(err =>
+      .catch((err) =>
         next(new HttpError("Creating board failed, please try again", 500))
       );
   } else {
@@ -26,5 +29,17 @@ const createBoard = (req, res, next) => {
   }
 };
 
+const getBoard = async (req, res, next) => {
+  const boardId = req.params["id"];
+  let board;
+  try {
+    board = await Board.findById(boardId).populate("lists");
+  } catch (e) {
+    next(new HttpError("Board could not be retrieved.", 404));
+  }
+  res.json({ board });
+};
+
 exports.getBoards = getBoards;
+exports.getBoard = getBoard;
 exports.createBoard = createBoard;
