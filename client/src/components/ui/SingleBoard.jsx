@@ -1,5 +1,7 @@
 import React from "react";
-const SingleBoard = () => {
+import { useEffect } from "react";
+const SingleBoard = ({ boardId }) => {
+
   return (
     <>
       <main>
