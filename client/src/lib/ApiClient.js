@@ -26,13 +26,21 @@ const apiClient = {
       .then(callback)
       .catch(logError);
   },
+
   createBoard: function(board, callback) {
     return axios
       .post(routes.CREATE_BOARD_URL, board)
       .then(unwrapData)
       .then(callback)
       .catch(logError);
-  }
+  },
+
+  getBoard: function(boardId, callback) {
+    return axios.get(routes.GET_BOARD_URL + boardId)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
+  },
 };
 
 export default apiClient;
