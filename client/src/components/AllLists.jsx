@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useInput } from '../hooks/useInput';
 import List from './List';
 
 const AllLists = ({ boardId }) => {
+  const newListInput = useInput("");
+  const [ newListSelected, setNewListSelected ] = useState(false);
+
   const lists = useSelector(({lists}) => lists.filter((list) => list.boardId === boardId ));
   return (
     <React.Fragment>
@@ -224,12 +228,12 @@ const AllLists = ({ boardId }) => {
           </div>
         </div> */}
       </div>
-      <div id="new-list" className="new-list">
-      <span>Add a list...</span>
-      <input type="text" placeholder="Add a list..." />
+      <div id="new-list" className={"new-list" + (newListSelected ? " selected" : "")} >
+        <span onClick={() => setNewListSelected(!newListSelected)} >Add a list...</span>
+      <input {...newListInput.bind} type="text" placeholder="Add a list..." />
       <div>
         <input type="submit" className="button" value="Save" />
-        <i className="x-icon icon"></i>
+        <i className="x-icon icon" onClick={() => setNewListSelected(false)}></i>
       </div>
     </div>
     </React.Fragment>
