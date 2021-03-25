@@ -1,5 +1,6 @@
 const Board = require("../models/board");
 const List = require("../models/list");
+const Card = require("../models/card");
 const HttpError = require("../models/httpError");
 const { validationResult } = require("express-validator");
 
@@ -33,7 +34,12 @@ const getBoard = async (req, res, next) => {
   const boardId = req.params["id"];
   let board;
   try {
-    board = await Board.findById(boardId).populate("lists");
+    board = await Board.findById(boardId).populate({
+      path: "lists",
+      populate: {
+        path: "cards",
+      },
+    });
   } catch (e) {
     next(new HttpError("Board could not be retrieved.", 404));
   }
