@@ -13,8 +13,9 @@ export default function boards(state = [], action) {
       const boards = state.filter(board => {
         board._id !== action.board._id;
       });
-
-      return state.concat(action.board);
+      // eslint-disable-next-line no-unused-vars
+      const { lists, ...redactedBoard} = action.board;
+      return boards.concat(redactedBoard);
     }
     default:
       return state;
