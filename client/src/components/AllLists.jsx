@@ -26,7 +26,7 @@ const AllLists = ({ boardId }) => {
       setNewListSelected(false);
     }));
   }
-
+  console.log(useSelector((s) => s))
   const lists = useSelector(({lists}) => lists.filter((list) => list.boardId === boardId ));
   return (
     <React.Fragment>

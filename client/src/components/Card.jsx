@@ -3,7 +3,7 @@ import React from 'react';
 const Card = ({ cardInfo }) => {
 
   const dueDateDiv = () => {
-    let dueDateClass = "";
+    // let dueDateClass = "";
 
     return (
       <i className="clock-icon sm-icon overdue-recent completed">

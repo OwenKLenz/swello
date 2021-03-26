@@ -28,7 +28,7 @@ const BoardsDashboard = (props) => {
         </header>
 
         <ul className="dashboard-board-tiles">
-          {boardTiles}
+          {boards && boardTiles}
           <CreateBoardTile onClick={props.onNewBoardClick} />
         </ul>
       </section>

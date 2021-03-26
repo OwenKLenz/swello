@@ -6,3 +6,8 @@ exports.validateList = [
   check("boardId").not().isEmpty(),
   check("list.title").not().isEmpty()
 ]
+
+exports.validateCard = [
+  check("boardId").not().isEmpty(),
+  check("card.title").not().isEmpty()
+]
