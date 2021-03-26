@@ -8,7 +8,18 @@ export default function lists(state=[], action) {
         return listWithoutCards;
       });
 
-      return state.concat(cardlessLists);
+      return cardlessLists;
+    }
+
+    case types.CREATE_LIST_SUCCESS: {
+      return state.concat(action.list);
+    }
+    case types.UPDATE_LIST_TITLE_SUCCESS: {
+      const {cards, ...listWithoutCards} = action.list;
+
+      return state.map(list => {
+        return list._id === listWithoutCards._id ? listWithoutCards : list;
+      })
     }
     default:
       return state;

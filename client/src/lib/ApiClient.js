@@ -41,9 +41,19 @@ const apiClient = {
       .then(callback)
       .catch(logError);
   },
-  // START HERE
-  createNewList: function(list) {
-    return axios.post(routes.CREATE_LIST_URL);
+
+  createList: function(list, callback) {
+    return axios.post(routes.CREATE_LIST_URL, list)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
+  },
+
+  updateListTitle: function(title, id, callback) {
+    return axios.put(routes.UPDATE_LIST_TITLE_URL.concat(id), {title})
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
   }
 };
 
