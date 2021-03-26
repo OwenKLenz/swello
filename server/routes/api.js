@@ -13,4 +13,6 @@ router.get('/boards/:id', boardsController.getBoard );
 
 router.post('/lists', validateList, listController.createList);
 
+router.put('/lists/:id', listController.updateListTitle);
+
 module.exports = router;
