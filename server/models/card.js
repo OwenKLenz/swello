@@ -31,6 +31,24 @@ const CardSchema = new Schema({
     required: [true, "The Card must have a position field"],
     default: 65535.0,
   },
+
+  completed: {
+    type: Boolean,
+    required: [true, "The card must have a completion status"],
+    default: false,
+  },
+
+  actions: [
+    {
+      type: String,
+    }
+  ],
+
+  comments: [
+    {
+      type: String,
+    }
+  ],
 });
 
 const Card = mongoose.model("Card", CardSchema);
