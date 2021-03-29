@@ -19,7 +19,8 @@ const Application = () => {
     <div>
       <TopNav />
       <Route path="/" exact component={BoardsDashboardContainer} />
-      <Route path="/boards/:id" component={Board} />
+      <Route path="/(boards|cards)/:id" component={Board} />
+      {/* <Route path="/cards/:id" component={CardModal} /> */}
 
       <Route path="/ui" exact component={UISection} />
       <Route path="/ui/allBoards" component={AllBoards} />

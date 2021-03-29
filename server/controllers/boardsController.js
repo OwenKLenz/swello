@@ -46,6 +46,19 @@ const getBoard = async (req, res, next) => {
   res.json({ board });
 };
 
+const updateBoard = (req, res, next) => {
+  const list = req.list;
+
+  Board.findByIdAndUpdate(req.list.boardId, {$push: {lists: list._id}})
+    .then(() => {
+      res.status(201).json(list);
+    })
+    .catch(err => {
+      next(new HttpError("Finding or updating board failed", 500));
+    })
+}
+
 exports.getBoards = getBoards;
 exports.getBoard = getBoard;
 exports.createBoard = createBoard;
+exports.updateBoard = updateBoard;

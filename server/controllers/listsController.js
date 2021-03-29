@@ -18,10 +18,8 @@ const createList = (req, res, next) => {
 
     List.create(list)
       .then(newList => {
-        Board.findByIdAndUpdate(newList.boardId, {$push: {lists: newList._id}})
-          .then(() => {
-            res.status(201).json(newList);
-          })
+        req.list = newList;
+        next();
       })
       .catch(err => {
         console.log(err)
@@ -42,5 +40,14 @@ const updateListTitle = (req, res, next) => {
     })
 }
 
+const updateList = (req, res, next) => {
+  const card = req.card; 
+
+  List.findByIdAndUpdate(card.ListId, {$push: { cards: card }})
+    .then(() => res.json({ card }))
+    .catch(err => next(new HttpError("Card Could not be added to a list."), 500))
+}
+
 exports.createList = createList;
 exports.updateListTitle = updateListTitle;
+exports.updateList = updateList;

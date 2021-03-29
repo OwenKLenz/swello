@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const CardSchema = new Schema({
   title: {
     type: String,
-    required: [true, "THe Card title field is required"],
+    required: [true, "The Card title field is required"],
   },
   dueDate: Date,
 

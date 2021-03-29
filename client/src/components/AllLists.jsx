@@ -7,6 +7,8 @@ import { createList } from "../actions/ListActions";
 const AllLists = ({ boardId }) => {
   const newListInput = useInput("");
   const [ newListSelected, setNewListSelected ] = useState(false);
+  const [ activeList, setActiveList ] = useState("");
+
   const dispatch = useDispatch();
 
   const submitList = () => {
@@ -26,12 +28,20 @@ const AllLists = ({ boardId }) => {
       setNewListSelected(false);
     }));
   }
-  console.log(useSelector((s) => s))
+
   const lists = useSelector(({lists}) => lists.filter((list) => list.boardId === boardId ));
+
   return (
     <React.Fragment>
       <div id="existing-lists" className="existing-lists">
-        {lists.map(list => <List key={list._id} listInfo={list}/>)}
+        {lists.map(list => {
+          return (<List
+            key={list._id}
+            listInfo={list}
+            setListToActive={(listId) => setActiveList(listId)}
+            currentActiveList={activeList}
+          />)
+        })}
       </div>
       <div id="new-list" className={"new-list" + (newListSelected ? " selected" : "")} >
         <span onClick={() => setNewListSelected(!newListSelected)} >Add a list...</span>

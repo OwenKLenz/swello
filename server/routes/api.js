@@ -12,12 +12,12 @@ router.post('/boards', validateBoard, boardsController.createBoard );
 
 router.get('/boards/:id', boardsController.getBoard );
 
-router.post('/lists', validateList, listsController.createList);
+router.post('/lists', validateList, listsController.createList, boardsController.updateBoard);
 
 router.put('/lists/:id', listsController.updateListTitle);
 
 router.get('/cards/:id', cardsController.getCard);
 
-router.post('/cards', validateCard, cardsController.createCard);
+router.post('/cards', validateCard, cardsController.createCard, listsController.updateList);
 
 module.exports = router;

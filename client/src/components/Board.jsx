@@ -124,7 +124,7 @@ const Board = () => {
       <div id="modal-container"></div>
       <div id="dropdown-container"></div>
     </>
-                            );
+  );
 };
 
 export default Board;

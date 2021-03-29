@@ -18,12 +18,12 @@ const getCard = async (req, res, next) => {
 const createCard = (req, res, next) => {
   const card = req.body.card;
   const listId = req.body.listId;
+  console.log(card);
 
-  Card.create(card)
+  Card.create({ listId, ...card })
   .then(card => {
-    List.findByIdAndUpdate(listId, {$push: { cards: card }})
-    .then(() => res.json({ card }))
-    .catch(err => next(new HttpError("Card Could not be added to a list."), 500))
+    req.card = card;
+    next();
   })
   .catch(() => next(new HttpError("The card could not be created.", 404)));
 };
