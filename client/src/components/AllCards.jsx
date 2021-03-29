@@ -6,12 +6,14 @@ const AllCards = ({ listId }) => {
 
   const cards = useSelector(({ cards }) => cards.filter(card => card.listId === listId));
 
+
+
   return (
     <React.Fragment>
       {cards.map(card => {
-        return <Card key={card._id} cardInfo={card}/>;
+        return (<Card key={card._id} cardInfo={card} />);
       })}
-      <div className="add-dropdown add-bottom">
+      {/* <div className="add-dropdown add-bottom">
         <div className="card">
           <div className="card-info"></div>
           <textarea name="add-card"></textarea>
@@ -22,7 +24,7 @@ const AllCards = ({ listId }) => {
         <div className="add-options">
           <span>...</span>
         </div>
-      </div>
+      </div> */}
     </React.Fragment>
   );
 }

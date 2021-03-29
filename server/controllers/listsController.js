@@ -41,9 +41,11 @@ const updateListTitle = (req, res, next) => {
 }
 
 const updateList = (req, res, next) => {
-  const card = req.card; 
+  const card = req.card;
 
-  List.findByIdAndUpdate(card.ListId, {$push: { cards: card }})
+  console.log(card);
+
+  List.findByIdAndUpdate(card.listId, {$addToSet: { cards: card._id }})
     .then(() => res.json({ card }))
     .catch(err => next(new HttpError("Card Could not be added to a list."), 500))
 }

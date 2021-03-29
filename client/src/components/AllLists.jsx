@@ -19,7 +19,7 @@ const AllLists = ({ boardId }) => {
     const list = {
       boardId,
       list: {
-        title: newListInput.value,
+       title: newListInput.value,
       }
     }
 
@@ -38,7 +38,7 @@ const AllLists = ({ boardId }) => {
           return (<List
             key={list._id}
             listInfo={list}
-            setListToActive={(listId) => setActiveList(listId)}
+            setActiveList={(listId) => setActiveList(listId)}
             currentActiveList={activeList}
           />)
         })}
