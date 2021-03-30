@@ -1,4 +1,24 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router";
+import {fetchCard} from '../actions/CardActions';
+
 const CardModal = () => {
+  const dispatch = useDispatch();
+  const {id} = useParams()
+  const card = useSelector(state => state.cards).find(card => card._id === id)
+  let listTitle;
+  let list = useSelector(state => state.lists).find(list => list._id === card.listId)
+
+  useEffect(() => {
+    dispatch(fetchCard(id))
+  }, [dispatch, id])
+
+  if (card && list) {
+    listTitle = list.title;
+  } else {
+    return null;
+  }
   return (
     <div id="modal-container">
       <div className="screen"></div>
@@ -7,11 +27,10 @@ const CardModal = () => {
         <header>
           <i className="card-icon icon .close-modal"></i>
           <textarea className="list-title" style={{ height: "45px" }}>
-            Cards do many cool things. Click on this card to open it and learn
-            more...
+            {card.title}
           </textarea>
           <p>
-            in list <a className="link">Stuff to try (this is a list)</a>
+            in list <a className="link">{listTitle}</a>
             <i className="sub-icon sm-icon"></i>
           </p>
         </header>
@@ -19,31 +38,17 @@ const CardModal = () => {
           <ul className="modal-outer-list">
             <li className="details-section">
               <ul className="modal-details-list">
-                <li className="labels-section">
-                  <h3>Labels</h3>
-                  <div className="member-container">
-                    <div className="green label colorblindable"></div>
-                  </div>
-                  <div className="member-container">
-                    <div className="yellow label colorblindable"></div>
-                  </div>
-                  <div className="member-container">
-                    <div className="orange label colorblindable"></div>
-                  </div>
-                  <div className="member-container">
-                    <div className="blue label colorblindable"></div>
-                  </div>
-                  <div className="member-container">
-                    <div className="purple label colorblindable"></div>
-                  </div>
-                  <div className="member-container">
-                    <div className="red label colorblindable"></div>
-                  </div>
-                  <div className="member-container">
-                    <i className="plus-icon sm-icon"></i>
-                  </div>
-                </li>
-                <li className="due-date-section">
+              {card.labels && (<li className="labels-section">
+                 <h3>Labels</h3>
+                    {card.labels.map(label => {
+                      return (
+                        <div className="member-container">
+                         <div className={`${label} label colorblindable`}></div>
+                      </div>
+                      )
+                    })}
+                </li>)}
+                {card.dueDate && (<li className="due-date-section">
                   <h3>Due Date</h3>
                   <div id="dueDateDisplay" className="overdue completed">
                     <input
@@ -52,9 +57,9 @@ const CardModal = () => {
                       className="checkbox"
                       checked=""
                     />
-                    Aug 4 at 10:42 AM <span>(past due)</span>
+                    {card.dueDate} <span>(past due - to be fixed)</span>
                   </div>
-                </li>
+                </li>)}
               </ul>
               <form className="description">
                 <p>Description</p>
@@ -62,7 +67,7 @@ const CardModal = () => {
                   Edit
                 </span>
                 <p className="textarea-overlay">
-                  Cards have a symbol to indicate if they contain a description.
+                  {card.description}
                 </p>
                 <p id="description-edit-options" className="hidden">
                   You have unsaved edits on this field.{" "}

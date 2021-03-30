@@ -7,13 +7,26 @@ function createCardSuccess(newCard) {
   }
 }
 
+export function fetchCardSuccess(card) {
+  return { type: types.FETCH_CARD_SUCCESS, card };
+}
+
+export function fetchCard(id) {
+  return function(dispatch) {
+    apiClient.getCard(id, data => {
+      console.log(data)
+      dispatch(fetchCardSuccess(data.card));
+    })
+  }
+}
+
 export const createCard = (newCard, callback) => {
   return dispatch => {
     apiClient.createCard(newCard, (createdCard) => {
       console.log(" back from server", createdCard)
       dispatch(createCardSuccess(createdCard.card));
     })
-  
+
     if (callback) {
       callback()
     }

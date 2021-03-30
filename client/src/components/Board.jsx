@@ -1,19 +1,31 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { fetchBoard } from "../actions/BoardActions";
 import AllLists from "./AllLists";
 
 const Board = () => {
   const dispatch = useDispatch();
-  const params = useParams();
-  const boardId = params.id;
+  const {id} = useParams();
+  const {pathname} = useLocation();
+  const cards = useSelector(state => state.cards)
+  // console.log( "card", card);
+  let boardId;
+  let card;
+  if (pathname.includes("boards") ) {
+    boardId = id
+  } else {
+    card = cards.find(c => c._id === id)
+    if (card) boardId = card.boardId;
+  }
 
   useEffect(() => {
-    dispatch(fetchBoard(boardId));
+    if (boardId) {
+      dispatch(fetchBoard(boardId));
+    }
   }, [boardId, dispatch]);
 
-  const board = useSelector(({ boards }) => boards.find(({_id}) => _id === boardId ));
+  const board = useSelector(({ boards }) => boards).find(({_id}) => _id === boardId );
 
   return (
     <>

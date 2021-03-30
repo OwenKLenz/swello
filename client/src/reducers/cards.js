@@ -9,6 +9,10 @@ export default function cards(state=[], action) {
     case types.CREATE_CARD_SUCCESS: {
       return state.concat(action.newCard);
     }
+    case types.FETCH_CARD_SUCCESS: {
+      return state.filter(card => card._id !== action.card._id)
+        .concat(action.card)
+    }
     default:
       return state;
   }
