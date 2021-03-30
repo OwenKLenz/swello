@@ -13,6 +13,14 @@ export default function cards(state=[], action) {
       return state.filter(card => card._id !== action.card._id)
         .concat(action.card)
     }
+    case types.UPDATE_CARD_SUCCESS: {
+      state.map(card => {
+        if (card._id === action.updatedCard._id) {
+          card = action.updatedCard
+        }
+        return card
+      })
+    }
     default:
       return state;
   }

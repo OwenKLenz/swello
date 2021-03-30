@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 const TopNav = () => (
   <nav>
     <ul>
-      <li className="boards trello-icon icon">
-        <Link to="/"><span>Boards</span></Link>
-      </li>
+      <Link to="/">
+        <li className="boards trello-icon icon">
+          <span>Boards</span>
+        </li>
+      </Link>
       <li className="search-container">
         <div className="search search-icon icon"></div>
         <div className="active-search">

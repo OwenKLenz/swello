@@ -29,6 +29,20 @@ const createCard = (req, res, next) => {
 };
 
 const updateCard = (req, res, next) => {
+  console.log(req.body);
+  const { cardId, updates } = req.body;
+
+  Card.findByIdAndUpdate(cardId, {...updates}, {new: true})
+  .then(newCard => {
+    res.status(200).json(newCard);
+  })
+
+  // card.title || oldCard.title
+}
+
+const addCommentToCard = (req, res, next) => {
+  const card = req.card;
+
   const comment = req.comment;
 
   Card.findByIdAndUpdate(comment.cardId, {$addToSet: { comments: comment._id }})
@@ -37,5 +51,6 @@ const updateCard = (req, res, next) => {
 }
 
 exports.getCard = getCard;
-exports.createCard = createCard;
 exports.updateCard = updateCard;
+exports.createCard = createCard;
+exports.addCommentToCard = addCommentToCard;

@@ -11,20 +11,31 @@ export function fetchCardSuccess(card) {
   return { type: types.FETCH_CARD_SUCCESS, card };
 }
 
+export function updateCardSuccess(updatedCard) {
+  return {type: types.UPDATE_CARD_SUCCESS, updatedCard};
+}
 export function fetchCard(id) {
   return function(dispatch) {
     apiClient.getCard(id, data => {
-      console.log(data)
       dispatch(fetchCardSuccess(data.card));
     })
   }
 }
 
+export const updateCard = (card, callback) => {
+  return function(dispatch) {
+    apiClient.updateCard(card, data => {
+      console.log("updated", data)
+      updateCardSuccess(data.card);
+    })
+  }
+
+}
+
 export const createCard = (newCard, callback) => {
   return dispatch => {
-    apiClient.createCard(newCard, (createdCard) => {
-      console.log(" back from server", createdCard)
-      dispatch(createCardSuccess(createdCard.card));
+    apiClient.createCard(newCard, (data) => {
+      dispatch(createCardSuccess(data.card));
     })
 
     if (callback) {

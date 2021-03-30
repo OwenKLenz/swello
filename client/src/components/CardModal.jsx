@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
-import {fetchCard} from '../actions/CardActions';
+// import { updateCard } from "../../../server/controllers/cardsController";
+import {fetchCard, updateCard} from '../actions/CardActions';
+
+import CardTitle from "./CardTitle";
 
 const CardModal = () => {
   const dispatch = useDispatch();
@@ -19,16 +22,19 @@ const CardModal = () => {
   } else {
     return null;
   }
+
+
+  const updateCardProperty = (properties, callback)  => { // {title: 'newval'}
+      dispatch(updateCard({cardId: card._id, updates: properties}, callback))
+  }
+
   return (
     <div id="modal-container">
       <div className="screen"></div>
       <div id="modal">
         <i className="x-icon icon close-modal"></i>
         <header>
-          <i className="card-icon icon .close-modal"></i>
-          <textarea className="list-title" style={{ height: "45px" }}>
-            {card.title}
-          </textarea>
+          <CardTitle updateCard={updateCardProperty} card={card} />
           <p>
             in list <a className="link">{listTitle}</a>
             <i className="sub-icon sm-icon"></i>
@@ -47,6 +53,9 @@ const CardModal = () => {
                       </div>
                       )
                     })}
+                    <div className="member-container">
+                      <i className="plus-icon sm-icon"></i>
+                    </div>
                 </li>)}
                 {card.dueDate && (<li className="due-date-section">
                   <h3>Due Date</h3>
