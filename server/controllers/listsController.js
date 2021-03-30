@@ -1,5 +1,4 @@
 const List = require("../models/list");
-const Board = require("../models/board");
 
 const HttpError = require("../models/httpError");
 const { validationResult } = require("express-validator");

@@ -11,3 +11,8 @@ exports.validateCard = [
   check("boardId").not().isEmpty(),
   check("card.title").not().isEmpty()
 ]
+
+exports.validateComment = [
+  check("cardId").not().isEmpty(),
+  check("comment.text").not().isEmpty()
+]

@@ -28,5 +28,14 @@ const createCard = (req, res, next) => {
   .catch(() => next(new HttpError("The card could not be created.", 404)));
 };
 
+const updateCard = (req, res, next) => {
+  const comment = req.comment;
+
+  Card.findByIdAndUpdate(comment.cardId, {$addToSet: { comments: comment._id }})
+  .then(() => res.json({comment}))
+  .catch(err => next(new HttpError("Comment could not be added to card"), 500));
+}
+
 exports.getCard = getCard;
 exports.createCard = createCard;
+exports.updateCard = updateCard;
