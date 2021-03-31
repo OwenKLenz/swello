@@ -24,12 +24,13 @@ export function fetchCard(id) {
 
 export const updateCard = (card, callback) => {
   return function(dispatch) {
-    apiClient.updateCard(card, data => {
-      console.log("updated", data)
-      updateCardSuccess(data.card);
+    apiClient.updateCard(card, updatedCard => {
+      dispatch(updateCardSuccess(updatedCard));
+      if (callback) {
+        callback()
+      }
     })
   }
-
 }
 
 export const createCard = (newCard, callback) => {
@@ -43,17 +44,3 @@ export const createCard = (newCard, callback) => {
     }
   }
 };
-
-
-// export function createBoard(board, callback) {
-//   return function(dispatch) {
-//     dispatch(createBoardRequest());
-//     apiClient.createBoard(board, data => {
-//       dispatch(createBoardSuccess(data.board));
-
-//       if (callback) {
-//         callback(data.board);
-//       }
-//     });
-//   };
-// }

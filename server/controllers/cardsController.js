@@ -29,10 +29,10 @@ const createCard = (req, res, next) => {
 };
 
 const updateCard = (req, res, next) => {
-  console.log(req.body);
-  const { cardId, updates } = req.body;
+  const cardId = req.params.id
+  const { card } = req.body;
 
-  Card.findByIdAndUpdate(cardId, {...updates}, {new: true})
+  Card.findByIdAndUpdate(cardId, {...card}, {new: true})
   .then(newCard => {
     res.status(200).json(newCard);
   })

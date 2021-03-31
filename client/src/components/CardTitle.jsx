@@ -1,8 +1,6 @@
-import React from "react";
 import useInput from "../hooks/useInput";
 
 const CardTitle = ({updateCard, card}) => {
-
   const titleField = useInput(card.title);
 
   return (

@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 // import { updateCard } from "../../../server/controllers/cardsController";
 import {fetchCard, updateCard} from '../actions/CardActions';
 
 import CardTitle from "./CardTitle";
+import CardDescription from "./CardDescription";
 
 const CardModal = () => {
   const dispatch = useDispatch();
@@ -12,6 +14,8 @@ const CardModal = () => {
   const card = useSelector(state => state.cards).find(card => card._id === id)
   let listTitle;
   let list = useSelector(state => state.lists).find(list => list._id === card.listId)
+
+  const [editingDescription, setEditingDescription] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCard(id))
@@ -32,21 +36,21 @@ const CardModal = () => {
     <div id="modal-container">
       <div className="screen"></div>
       <div id="modal">
-        <i className="x-icon icon close-modal"></i>
-        <header>
-          <CardTitle updateCard={updateCardProperty} card={card} />
-          <p>
-            in list <a className="link">{listTitle}</a>
-            <i className="sub-icon sm-icon"></i>
-          </p>
-        </header>
-        <section className="modal-main">
-          <ul className="modal-outer-list">
-            <li className="details-section">
-              <ul className="modal-details-list">
-              {card.labels && (<li className="labels-section">
-                 <h3>Labels</h3>
-                    {card.labels.map(label => {
+          <Link to={"/boards/" + card.boardId}><i className="x-icon icon close-modal"></i></Link>
+          <header>
+            <CardTitle updateCard={updateCardProperty} card={card} />
+            <p>
+              in list <a className="link">{listTitle}</a>
+              <i className="sub-icon sm-icon"></i>
+            </p>
+          </header>
+          <section className="modal-main">
+            <ul className="modal-outer-list">
+              <li className="details-section">
+                <ul className="modal-details-list">
+                {card.labels && (<li className="labels-section">
+                  <h3>Labels</h3>
+                      {card.labels.map(label => {
                       return (
                         <div className="member-container">
                          <div className={`${label} label colorblindable`}></div>
@@ -70,20 +74,7 @@ const CardModal = () => {
                   </div>
                 </li>)}
               </ul>
-              <form className="description">
-                <p>Description</p>
-                <span id="description-edit" className="link">
-                  Edit
-                </span>
-                <p className="textarea-overlay">
-                  {card.description}
-                </p>
-                <p id="description-edit-options" className="hidden">
-                  You have unsaved edits on this field.{" "}
-                  <span className="link">View edits</span> -{" "}
-                  <span className="link">Discard</span>
-                </p>
-              </form>
+              <CardDescription cardId={card._id} updateCard={updateCardProperty} />
             </li>
             <li className="comment-section">
               <h2 className="comment-icon icon">Add Comment</h2>

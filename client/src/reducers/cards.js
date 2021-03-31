@@ -14,7 +14,7 @@ export default function cards(state=[], action) {
         .concat(action.card)
     }
     case types.UPDATE_CARD_SUCCESS: {
-      state.map(card => {
+      return state.map(card => {
         if (card._id === action.updatedCard._id) {
           card = action.updatedCard
         }
