@@ -20,9 +20,13 @@ router.put('/lists/:id', listsController.updateListTitle);
 router.get('/cards/:id', cardsController.getCard);
 
 router.post('/cards', validateCard, cardsController.createCard, listsController.updateList);
+
 router.put('/cards/:id', /*validateComment,*/ cardsController.updateCard);
+
+router.delete('/cards/:id', cardsController.deleteCard, listsController.removeCardFromList);
 
 router.post('/comments'/*, validateComment*/, commentsController.createComment, cardsController.addCommentToCard);
 
+router.delete('/comments/:id'/*, validateComment*/, commentsController.deleteComment);
 
 module.exports = router;

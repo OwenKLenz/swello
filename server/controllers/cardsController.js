@@ -50,7 +50,20 @@ const addCommentToCard = (req, res, next) => {
   .catch(err => next(new HttpError("Comment could not be added to card"), 500));
 }
 
+const deleteCard = (req, res, next) => {
+  const cardId = req.params.id;
+
+  Card.findByIdAndDelete(cardId)
+  .then(deletedCard => {
+    console.log("deleted card", deletedCard);
+    req.listId = deletedCard.listId;
+    next();
+  })
+  .catch(err => next(new HttpError("Card not found"), 500));
+}
+
 exports.getCard = getCard;
 exports.updateCard = updateCard;
 exports.createCard = createCard;
+exports.deleteCard = deleteCard;
 exports.addCommentToCard = addCommentToCard;

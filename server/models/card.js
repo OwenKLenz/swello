@@ -13,6 +13,7 @@ const CardSchema = new Schema({
       type: String,
     },
   ],
+  archived: Boolean,
 
   description: String,
 

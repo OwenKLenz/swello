@@ -49,6 +49,20 @@ const updateList = (req, res, next) => {
     .catch(err => next(new HttpError("Card Could not be added to a list."), 500))
 }
 
+const removeCardFromList = (req, res, next) => {
+  const listId = req.listId;
+  const cardId = req.params.id;
+
+  console.log("list id:", listId);
+
+  List.updateOne({_id: listId}, { $pull: { cards: { _id: cardId } } })
+  .then(() => {
+    res.sendStatus(204);
+  })
+  .catch(err => next(new HttpError("Card was not removed from list")))
+}
+
 exports.createList = createList;
 exports.updateListTitle = updateListTitle;
 exports.updateList = updateList;
+exports.removeCardFromList = removeCardFromList;
