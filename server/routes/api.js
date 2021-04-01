@@ -4,6 +4,7 @@ const boardsController = require("../controllers/boardsController");
 const listsController = require("../controllers/listsController");
 const cardsController = require("../controllers/cardsController");
 const commentsController = require("../controllers/commentsController");
+const actionsController = require("../controllers/actionsController");
 const { validateBoard, validateList, validateCard, validateComment } = require("../validators/validators");
 
 
@@ -21,11 +22,11 @@ router.get('/cards/:id', cardsController.getCard);
 
 router.post('/cards', validateCard, cardsController.createCard, listsController.updateList);
 
-router.put('/cards/:id', /*validateComment,*/ cardsController.updateCard);
+router.put('/cards/:id',actionsController.createAction, /*validateComment,*/ cardsController.updateCard);
 
 router.delete('/cards/:id', cardsController.deleteCard, listsController.removeCardFromList);
 
-router.post('/comments'/*, validateComment*/, commentsController.createComment, cardsController.addCommentToCard);
+router.post('/comments', validateComment, commentsController.createComment, cardsController.addCommentToCard);
 
 // TODO: Remove comment from it's Card
 router.delete('/comments/:id'/*, validateComment*/, commentsController.deleteComment);

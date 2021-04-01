@@ -30,11 +30,15 @@ const createCard = (req, res, next) => {
 
 const updateCard = (req, res, next) => {
   const cardId = req.params.id
-  const { card } = req.body;
+  let { action, ...card } = req.body.card;
 
   Card.findByIdAndUpdate(cardId, {...card}, {new: true})
   .then(newCard => {
-    res.status(200).json(newCard);
+    if(action) {
+      res.status(200).json({...newCard, action: req.action});
+    } else {
+      res.status(200).json(newCard);
+    }
   })
 
   // card.title || oldCard.title

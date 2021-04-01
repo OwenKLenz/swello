@@ -1,20 +1,31 @@
-import React from 'react';
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
-// url is /boards/:id
-// url is /cards/:id
-// must dispatch only if boardId is defined.
 const Card = ({ cardInfo }) => {
 
-  const dueDateDiv = () => {
-    // let dueDateClass = "";
+  const calculateDueness = (dueDate) => {
+    const dueDateDays = Date.parse(dueDate) / (1000 * 60 * 60 * 24);
+    const nowDays = Date.now() / (1000 * 60 * 60 * 24);
+    const dateDifference = dueDateDays - nowDays;
 
+    if (dateDifference < 0) {
+      return "overdue";
+    } else if (dateDifference > 0) {
+      return "due-soon";
+    }
+
+    return "overdue-recent";
+  }
+
+  const dueDateDiv = () => {
     return (
-      <i className="clock-icon sm-icon overdue-recent completed">
-          {new Date(cardInfo.dueDate).toDateString()}
+      <i className={"clock-icon sm-icon " + calculateDueness(cardInfo.dueDate)}>
+          {moment(cardInfo.dueDate).format("MMM D")}
       </i>
     )
   }
+
   return (
     <div className="card-background">
       <Link to={`/cards/${cardInfo._id}`}>
@@ -47,7 +58,6 @@ const Card = ({ cardInfo }) => {
         </div>
       </Link>
     </div>
-
   );
 }
 

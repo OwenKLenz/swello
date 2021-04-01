@@ -9,6 +9,9 @@ import CardTitle from "./CardTitle";
 import CardDescription from "./CardDescription";
 import CardCommentInput from "./CardCommentInput";
 import Comment from "./Comment";
+import Action from "./Action";
+
+import DueDatePopover from "./DueDatePopover";
 
 const CardModal = () => {
   const dispatch = useDispatch();
@@ -17,10 +20,13 @@ const CardModal = () => {
   let listTitle;
   let lists = useSelector(state => state.lists)
   let list;
-  let comments = useSelector(state => state.comments);
-  console.log(comments);
+  let activities = useSelector(state => state.comments.concat(state.actions.map(action => {
+    return {...action, isAction: true}
+  })));
+  ;
 
   const [editingDescription, setEditingDescription] = useState(false);
+  const [dueDatePopoverDisplay, setDueDatePopoverDisplay] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCard(id))
@@ -29,11 +35,11 @@ const CardModal = () => {
   if (card && lists) {
     list = lists.find(list => list._id === card.listId)
 
-    comments = comments.filter(comment => {
-      return comment.cardId === id;
-    })
-
     if (!list) return null;
+    activities = activities.filter(activity => {
+      return activity.cardId === id;
+    })
+    activities.sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt))
     listTitle = list.title;
   } else {
     return null;
@@ -41,7 +47,8 @@ const CardModal = () => {
 
   const handleArchive = (e) => {
     e.preventDefault()
-    updateCardProperty({archived: !card.archived})
+    let newArchive = !card.archived
+    updateCardProperty({archived: newArchive , action: newArchive ? "this card was archived" : "this card was returned to the board" })
 
   }
 
@@ -78,6 +85,7 @@ const CardModal = () => {
     <div id="modal-container">
       <div className="screen"></div>
       <div id="modal">
+        {dueDatePopoverDisplay && <DueDatePopover togglePopover={() => setDueDatePopoverDisplay(!dueDatePopoverDisplay)}/>}
           <Link to={"/boards/" + card.boardId}><i className="x-icon icon close-modal"></i></Link>
           <header>
             <CardTitle updateCard={updateCardProperty} card={card} />
@@ -126,8 +134,11 @@ const CardModal = () => {
               </ul>
               <ul className="modal-activity-list">
                 {
-                  comments.map(comment => {
-                    return <Comment comment={comment} />
+                  activities.map(activity => {
+                    if (activity.isAction) {
+                      return <Action action={activity}/>
+                    }
+                    return <Comment comment={activity} />
                   })
                 }
                 <li>
@@ -223,8 +234,8 @@ const CardModal = () => {
             <li className="checklist-button">
               <i className="checklist-icon sm-icon"></i>Checklist
             </li>
-            <li className="date-button not-implemented">
-              <i className="clock-icon sm-icon"></i>Due Date
+            <li className="date-button" onClick={() => setDueDatePopoverDisplay(!dueDatePopoverDisplay)}>
+              <i className="clock-icon sm-icon" ></i>Due Date
             </li>
             <li className="attachment-button not-implemented">
               <i className="attachment-icon sm-icon"></i>Attachment
