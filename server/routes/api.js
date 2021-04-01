@@ -27,6 +27,7 @@ router.delete('/cards/:id', cardsController.deleteCard, listsController.removeCa
 
 router.post('/comments'/*, validateComment*/, commentsController.createComment, cardsController.addCommentToCard);
 
+// TODO: Remove comment from it's Card
 router.delete('/comments/:id'/*, validateComment*/, commentsController.deleteComment);
 
 module.exports = router;

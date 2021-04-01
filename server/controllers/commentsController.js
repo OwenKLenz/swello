@@ -6,6 +6,8 @@ const { validationResult } = require("express-validator");
 const createComment = (req, res, next) => {
   const errors = validationResult(req);
 
+  console.log(req.body)
+
   if (errors.isEmpty()) {
     const cardId = req.body.cardId;
     const text = req.body.comment.text;

@@ -33,7 +33,7 @@ const List = ({ listInfo, setActiveList, currentActiveList }) => {
       //   "card": {
       //     "title": "My new card"
       //   }
-      // }  
+      // }
   }
   const isActive = currentActiveList === listInfo._id;
 
@@ -43,8 +43,9 @@ const List = ({ listInfo, setActiveList, currentActiveList }) => {
         <div className="list">
           <a className="more-icon sm-icon" href=""></a>
           <div>
-            {editingMode ? 
+            {editingMode ?
               <input
+                className="list-title"
                 type="text" {...editList.bind}
                 onBlur={updateTitle}
                 onKeyUp={(e) => {

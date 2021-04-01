@@ -67,12 +67,24 @@ const apiClient = {
       .then(callback)
       .catch(logError);
   },
+  deleteCard: function(cardId, callback) {
+    return axios.delete(routes.DELETE_CARD_URL + cardId)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
+  },
   getCard: function(cardId, callback) {
     return axios.get(routes.GET_CARD_URL + cardId)
       .then(unwrapData)
       .then(callback)
       .catch(logError);
   },
+  createComment: function(comment, callback) {
+    return axios.post(routes.CREATE_COMMENT_URL, comment)
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
+  }
 };
 
 export default apiClient;

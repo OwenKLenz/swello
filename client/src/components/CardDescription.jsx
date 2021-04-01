@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import useInput from "../hooks/useInput";
 
 const CardDescription = ({cardId, updateCard}) => {
-  const description = useSelector(state => state.cards).find(card => card._id === cardId).description
+  const description = useSelector(state => state.cards).find(card => card._id === cardId).description || ""
   const [editingDescription, setEditingDescription] = useState(false);
   const descriptionInput = useInput(description);
 

@@ -21,6 +21,9 @@ export default function cards(state=[], action) {
         return card
       })
     }
+    case types.DELETE_CARD_SUCCESS: {
+      return state.filter(card => card._id !== action.cardId)
+    }
     default:
       return state;
   }

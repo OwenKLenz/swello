@@ -14,6 +14,9 @@ export function fetchCardSuccess(card) {
 export function updateCardSuccess(updatedCard) {
   return {type: types.UPDATE_CARD_SUCCESS, updatedCard};
 }
+export function deleteCardSuccess(CardId) {
+  return {type: types.DELETE_CARD_SUCCESS, CardId};
+}
 export function fetchCard(id) {
   return function(dispatch) {
     apiClient.getCard(id, data => {
@@ -22,9 +25,22 @@ export function fetchCard(id) {
   }
 }
 
+export const deleteCard = (cardId, callback) => {
+  return function(dispatch) {
+    apiClient.deleteCard(cardId, updatedCard => {
+      dispatch(deleteCardSuccess(updatedCard));
+      if (callback) {
+        callback()
+      }
+    })
+  }
+}
+
 export const updateCard = (card, callback) => {
+  console.log( "dispatched", card)
   return function(dispatch) {
     apiClient.updateCard(card, updatedCard => {
+      console.log(updatedCard);
       dispatch(updateCardSuccess(updatedCard));
       if (callback) {
         callback()

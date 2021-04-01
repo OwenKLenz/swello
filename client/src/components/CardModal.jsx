@@ -3,17 +3,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 // import { updateCard } from "../../../server/controllers/cardsController";
-import {fetchCard, updateCard} from '../actions/CardActions';
+import {fetchCard, updateCard, deleteCard} from '../actions/CardActions';
 
 import CardTitle from "./CardTitle";
 import CardDescription from "./CardDescription";
+import CardCommentInput from "./CardCommentInput";
+import Comment from "./Comment";
 
 const CardModal = () => {
   const dispatch = useDispatch();
   const {id} = useParams()
   const card = useSelector(state => state.cards).find(card => card._id === id)
   let listTitle;
-  let list = useSelector(state => state.lists).find(list => list._id === card.listId)
+  let lists = useSelector(state => state.lists)
+  let list;
+  let comments = useSelector(state => state.comments);
+  console.log(comments);
 
   const [editingDescription, setEditingDescription] = useState(false);
 
@@ -21,15 +26,52 @@ const CardModal = () => {
     dispatch(fetchCard(id))
   }, [dispatch, id])
 
-  if (card && list) {
+  if (card && lists) {
+    list = lists.find(list => list._id === card.listId)
+
+    comments = comments.filter(comment => {
+      return comment.cardId === id;
+    })
+
+    if (!list) return null;
     listTitle = list.title;
   } else {
     return null;
   }
 
+  const handleArchive = (e) => {
+    e.preventDefault()
+    updateCardProperty({archived: !card.archived})
+
+  }
+
+  const handleDelete = (e) => {
+    dispatch(deleteCard(id))
+  }
 
   const updateCardProperty = (properties, callback)  => { // {title: 'newval'}
       dispatch(updateCard({cardId: card._id, updates: properties}, callback))
+  }
+
+  const renderArchived = () => {
+    if (!card.archived) {
+      return (
+      <li className="archive-button" onClick={handleArchive}>
+        <i className="file-icon sm-icon "></i>Archive
+        </li>
+      )
+    }
+
+    return (<>
+      <li class="unarchive-button" onClick={handleArchive}>
+        <i class="send-icon sm-icon">
+      </i>Send to board</li>
+      <Link to={`/boards/${card.boardId}`}>
+        <li class="red-button" onClick={handleDelete}>
+          <i class="minus-icon sm-icon">
+        </i>Delete</li>
+      </Link>
+    </>)
   }
 
   return (
@@ -48,9 +90,9 @@ const CardModal = () => {
             <ul className="modal-outer-list">
               <li className="details-section">
                 <ul className="modal-details-list">
-                {card.labels && (<li className="labels-section">
+                <li className="labels-section">
                   <h3>Labels</h3>
-                      {card.labels.map(label => {
+                  {card.labels && card.labels.map(label => {
                       return (
                         <div className="member-container">
                          <div className={`${label} label colorblindable`}></div>
@@ -60,7 +102,7 @@ const CardModal = () => {
                     <div className="member-container">
                       <i className="plus-icon sm-icon"></i>
                     </div>
-                </li>)}
+                </li>
                 {card.dueDate && (<li className="due-date-section">
                   <h3>Due Date</h3>
                   <div id="dueDateDisplay" className="overdue completed">
@@ -76,42 +118,18 @@ const CardModal = () => {
               </ul>
               <CardDescription cardId={card._id} updateCard={updateCardProperty} />
             </li>
-            <li className="comment-section">
-              <h2 className="comment-icon icon">Add Comment</h2>
-              <div>
-                <div className="member-container">
-                  <div className="card-member">TP</div>
-                </div>
-                <div className="comment">
-                  <label>
-                    <textarea
-                      required=""
-                      rows="1"
-                      placeholder="Write a comment..."
-                    ></textarea>
-                    <div>
-                      <a className="light-button card-icon sm-icon"></a>
-                      <a className="light-button smiley-icon sm-icon"></a>
-                      <a className="light-button email-icon sm-icon"></a>
-                      <a className="light-button attachment-icon sm-icon"></a>
-                    </div>
-                    <div>
-                      <input
-                        type="submit"
-                        className="button not-implemented"
-                        value="Save"
-                      />
-                    </div>
-                  </label>
-                </div>
-              </div>
-            </li>
+            <CardCommentInput />
             <li className="activity-section">
               <h2 className="activity-icon icon">Activity</h2>
               <ul className="horiz-list">
                 <li className="not-implemented">Show Details</li>
               </ul>
               <ul className="modal-activity-list">
+                {
+                  comments.map(comment => {
+                    return <Comment comment={comment} />
+                  })
+                }
                 <li>
                   <div className="member-container">
                     <div className="card-member">TP</div>
@@ -225,9 +243,7 @@ const CardModal = () => {
               <i className="check-icon sm-icon"></i>
             </li>
             <hr />
-            <li className="archive-button">
-              <i className="file-icon sm-icon "></i>Archive
-            </li>
+            {renderArchived()}
           </ul>
           <ul className="light-list">
             <li className="not-implemented">Share and more...</li>

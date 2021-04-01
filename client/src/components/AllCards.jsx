@@ -4,7 +4,7 @@ import Card from './Card';
 
 const AllCards = ({ listId }) => {
 
-  const cards = useSelector(({ cards }) => cards.filter(card => card.listId === listId));
+  const cards = useSelector(({ cards }) => cards.filter(card => card.listId === listId)).filter(card => !card.archived);
 
 
 

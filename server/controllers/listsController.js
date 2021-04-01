@@ -53,9 +53,7 @@ const removeCardFromList = (req, res, next) => {
   const listId = req.listId;
   const cardId = req.params.id;
 
-  console.log("list id:", listId);
-
-  List.updateOne({_id: listId}, { $pull: { cards: { _id: cardId } } })
+  List.updateOne({_id: listId}, { $pull: { cards: cardId } })
   .then(() => {
     res.sendStatus(204);
   })
