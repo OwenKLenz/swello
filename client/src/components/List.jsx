@@ -1,16 +1,32 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useInput from "../hooks/useInput";
 import AllCards from "./AllCards";
 import { updateListTitle } from "../actions/ListActions";
-import { createCard } from "../actions/CardActions";
+import { createCard, moveCard } from "../actions/CardActions";
+import { useDrop } from "react-dnd";
+import * as itemTypes from '../constants/itemTypes';
+import PositionCalculator from "../lib/positionCalculator";
 
 const List = ({ listInfo, setActiveList, currentActiveList }) => {
   const dispatch = useDispatch();
   const [editingMode, toggleEditingMode] = useState(false);
-
+  let cards = useSelector(state => state.cards)
   const editList = useInput(listInfo.title);
   const editCard = useInput("");
+
+  const [{canDrop, isOver}, dropRef] = useDrop(() => ({
+    accept: itemTypes.CARD,
+    drop: (item, monitor) => {
+      const newPosition =  PositionCalculator(cards, cards.length)
+      dispatch(moveCard(item, listInfo, newPosition))
+    },
+    collect: monitor => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop()
+    })
+  }), [listInfo, dispatch]);
+
   const updateTitle = () => {
     dispatch(updateListTitle(editList.value, listInfo._id, () => {
       toggleEditingMode(false);
@@ -20,7 +36,11 @@ const List = ({ listInfo, setActiveList, currentActiveList }) => {
 
   const handleAddCard = (e) => {
     e.preventDefault();
-    let card = {title: editCard.value, boardId: listInfo.boardId};
+    const items = cards.filter(card => card.listId === listInfo._id)
+
+    let position =PositionCalculator(items, items.length)
+    console.log("this is the items", items);
+    let card = {title: editCard.value, boardId: listInfo.boardId, position};
     let newCard = { listId: listInfo._id, card };
     console.log(newCard);
     const reset = () => {
@@ -28,19 +48,28 @@ const List = ({ listInfo, setActiveList, currentActiveList }) => {
       setActiveList("")
     }
     dispatch(createCard(newCard, reset));
-      // {
-      //   "listId": 13,
-      //   "card": {
-      //     "title": "My new card"
-      //   }
-      // }
   }
+
+  // function selectBackgroundColor(isDragActive, canDrop) {
+  //   if (isDragActive) {
+  //     return 'darkgreen';
+  //   }
+  //   else if (canDrop) {
+  //     return 'darkkhaki';
+  //   }
+  //   else {
+  //     return '#222';
+  //   }
+  // }
+  // const isDragActive = canDrop && isOver;
+  // const backgroundColor = selectBackgroundColor(isDragActive, canDrop);
+
   const isActive = currentActiveList === listInfo._id;
 
   return (
     <div className={"list-wrapper" + (isActive ? " add-dropdown-active" : "")}>
       <div className="list-background">
-        <div className="list">
+        <div className="list" ref={dropRef} >
           <a className="more-icon sm-icon" href=""></a>
           <div>
             {editingMode ?

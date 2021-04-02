@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useInput } from '../hooks/useInput';
 import List from './List';
 import { createList } from "../actions/ListActions";
+import { useDrop } from 'react-dnd';
+import PositionCalculator from '../lib/positionCalculator';
 
 const AllLists = ({ boardId }) => {
   const newListInput = useInput("");
@@ -15,11 +17,13 @@ const AllLists = ({ boardId }) => {
     if (newListInput.value.length === 0) {
       return
     }
-
+    const position = PositionCalculator(lists, lists.length)
+    console.log("these are the lists", lists)
     const list = {
       boardId,
       list: {
        title: newListInput.value,
+       position
       }
     }
 
@@ -30,6 +34,7 @@ const AllLists = ({ boardId }) => {
   }
 
   const lists = useSelector(({lists}) => lists.filter((list) => list.boardId === boardId ));
+  lists.sort((a, b) => a.position - b.position)
 
   return (
     <React.Fragment>

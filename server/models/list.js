@@ -12,9 +12,9 @@ const ListSchema = new Schema(
       ref: "Board",
     },
     position: {
-      type: Schema.Types.Decimal128,
+      type: Number,
       required: [true, "The List position field is required"],
-      default: 65535.0,
+
     },
     cards: [
       {

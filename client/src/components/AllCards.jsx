@@ -6,7 +6,7 @@ const AllCards = ({ listId }) => {
 
   const cards = useSelector(({ cards }) => cards.filter(card => card.listId === listId)).filter(card => !card.archived);
 
-
+  cards.sort((a, b) => a.position - b.position)
 
   return (
     <React.Fragment>

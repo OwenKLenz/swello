@@ -15,6 +15,7 @@ import MoveCardPopover from "./ui/MoveCardPopover";
 import SingleBoard from "./ui/SingleBoard";
 import Board from "./Board";
 import CardModal from './CardModal';
+
 const Application = () => {
   return (
     <div>

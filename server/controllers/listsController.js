@@ -7,12 +7,15 @@ const createList = (req, res, next) => {
   const errors = validationResult(req);
 
   if (errors.isEmpty()) {
+    console.log("this is the body:", req.body)
+
     const boardId = req.body.boardId;
     const title = req.body.list.title;
-
+    const position = req.body.list.position;
     const list = {
       boardId,
-      title
+      title,
+      position
     }
 
     List.create(list)

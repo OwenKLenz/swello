@@ -28,9 +28,8 @@ const CardSchema = new Schema({
   },
 
   position: {
-    type: Schema.Types.Decimal128,
+    type: Number,
     required: [true, "The Card must have a position field"],
-    default: 65535.0,
   },
 
   completed: {

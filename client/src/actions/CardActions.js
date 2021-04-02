@@ -1,5 +1,6 @@
 import apiClient from "../lib/ApiClient";
 import * as types from "../constants/ActionTypes";
+
 function createCardSuccess(newCard) {
   return {
     type: types.CREATE_CARD_SUCCESS,
@@ -7,6 +8,9 @@ function createCardSuccess(newCard) {
   }
 }
 
+export function moveCardSuccess(updatedCard) {
+  return {type: types.MOVE_CARD_SUCCESS, updatedCard}
+}
 export function fetchCardSuccess(card) {
   return { type: types.FETCH_CARD_SUCCESS, card };
 }
@@ -24,6 +28,14 @@ export function fetchCard(id) {
     })
   }
 }
+
+export function moveCard(card, newList, position) {
+  return function(dispatch) {
+    const newCard = {...card, listId: newList._id, boardId: newList.boardId, position};
+    dispatch(moveCardSuccess(newCard))
+  }
+}
+
 
 export const deleteCard = (cardId, callback) => {
   return function(dispatch) {

@@ -21,6 +21,14 @@ export default function cards(state=[], action) {
         return card
       })
     }
+    case types.MOVE_CARD_SUCCESS: {
+      return state.map(card => {
+        if (card._id === action.updatedCard._id) {
+          card = action.updatedCard
+        }
+        return card
+      })
+    }
     case types.DELETE_CARD_SUCCESS: {
       return state.filter(card => card._id !== action.cardId)
     }
