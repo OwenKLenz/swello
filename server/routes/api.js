@@ -22,12 +22,12 @@ router.get('/cards/:id', cardsController.getCard);
 
 router.post('/cards', validateCard, cardsController.createCard, listsController.updateList);
 
-router.put('/cards/:id',actionsController.createAction, /*validateComment,*/ cardsController.updateCard);
+router.put('/cards/:id',actionsController.createAction, /*validateComment,*/ cardsController.updateCard, cardsController.addActionToCard);
 
 router.delete('/cards/:id', cardsController.deleteCard, listsController.removeCardFromList);
 
 router.post('/comments', validateComment, commentsController.createComment, cardsController.addCommentToCard);
-
+router.get('/actions', actionsController.getActions)
 // TODO: Remove comment from it's Card
 router.delete('/comments/:id'/*, validateComment*/, commentsController.deleteComment);
 

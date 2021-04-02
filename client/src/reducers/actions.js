@@ -9,7 +9,7 @@ export default function actions(state=[], action) {
     }
 
     case types.UPDATE_CARD_SUCCESS: {
-      return state.concat(action.updatedCard.action)
+      return action.action ? state.concat(action.action) : state
     }
     default:
       return state;

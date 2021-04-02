@@ -41,7 +41,8 @@ const CardSchema = new Schema({
 
   actions: [
     {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "Action"
     }
   ],
 

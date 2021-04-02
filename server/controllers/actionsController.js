@@ -9,8 +9,8 @@ const createAction = (req, res, next) => {
   console.log("creating action:", req.body)
 
   if (errors.isEmpty()) {
-    const cardId = req.body.cardId;
-    const description = req.body.card.action;
+    const cardId = req.params.id;
+    const description = req.body.action;
     if (description) {
       const action = {
         cardId,
@@ -35,6 +35,11 @@ const createAction = (req, res, next) => {
   }
 }
 
+const getActions = (req, res, next) => {
+  Action.find({})
+  .then(actions => res.json(actions))
+}
+
 const deleteAction = (req, res, next) => {
   const actionId = req.params.id;
 
@@ -48,4 +53,5 @@ const deleteAction = (req, res, next) => {
 }
 
 exports.createAction = createAction;
+exports.getActions = getActions;
 exports.deleteAction = deleteAction;

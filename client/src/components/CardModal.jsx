@@ -24,6 +24,7 @@ const CardModal = () => {
     return {...action, isAction: true}
   })));
   ;
+  const actions = useSelector(state => state.actions)
 
   const [editingDescription, setEditingDescription] = useState(false);
   const [dueDatePopoverDisplay, setDueDatePopoverDisplay] = useState(false);
@@ -44,6 +45,7 @@ const CardModal = () => {
   } else {
     return null;
   }
+  console.log("actions", actions)
 
   const handleArchive = (e) => {
     e.preventDefault()

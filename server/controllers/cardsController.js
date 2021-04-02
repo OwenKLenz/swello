@@ -7,7 +7,7 @@ const getCard = async (req, res, next) => {
   const cardId = req.params["id"];
   let card;
   try {
-    card = await Card.findById(cardId);
+    card = await Card.findById(cardId).populate("comments").populate("actions")
   } catch (error) {
     next(new HttpError("Card could not be found.", 404));
   }
@@ -30,20 +30,27 @@ const createCard = (req, res, next) => {
 
 const updateCard = (req, res, next) => {
   const cardId = req.params.id
-  let { action, ...card } = req.body.card;
-
+  let card = req.body.card;
   Card.findByIdAndUpdate(cardId, {...card}, {new: true})
   .then(newCard => {
-    if(action) {
-      res.status(200).json({...newCard, action: req.action});
-    } else {
-      res.status(200).json(newCard);
-    }
+    req.card = newCard;
+    next();
   })
 
   // card.title || oldCard.title
 }
+const addActionToCard = (req, res, next) => {
+  const card = req.card;
 
+  const action = req.action;
+  if (action) {
+    Card.findByIdAndUpdate(action.cardId, {$addToSet: { actions: action._id }}, {new: true})
+    .then(() => res.json({card, action}))
+    .catch(err => next(new HttpError("Comment could not be added to card"), 500));
+  } else {
+    res.json(card)
+  }
+}
 const addCommentToCard = (req, res, next) => {
   const card = req.card;
 
@@ -69,5 +76,6 @@ const deleteCard = (req, res, next) => {
 exports.getCard = getCard;
 exports.updateCard = updateCard;
 exports.createCard = createCard;
-exports.deleteCard = deleteCard;
 exports.addCommentToCard = addCommentToCard;
+exports.addActionToCard = addActionToCard;
+exports.deleteCard = deleteCard;

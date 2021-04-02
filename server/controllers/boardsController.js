@@ -42,6 +42,14 @@ const getBoard = async (req, res, next) => {
           path: "comments",
         },
       },
+    }).populate({
+      path: "lists",
+      populate: {
+        path: "cards",
+        populate: {
+          path: "actions",
+        },
+      },
     });
   } catch (e) {
     next(new HttpError("Board could not be retrieved.", 404));

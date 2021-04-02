@@ -9,6 +9,7 @@ const Board = () => {
   const {id} = useParams();
   const {pathname} = useLocation();
   const cards = useSelector(state => state.cards)
+  const state = useSelector(state => state)
   // console.log( "card", card);
   let boardId;
   let card;
@@ -26,7 +27,7 @@ const Board = () => {
   }, [boardId, dispatch]);
 
   const board = useSelector(({ boards }) => boards).find(({_id}) => _id === boardId );
-
+  console.log(state)
   return (
     <>
     { board &&

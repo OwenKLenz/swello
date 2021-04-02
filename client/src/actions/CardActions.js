@@ -11,8 +11,8 @@ export function fetchCardSuccess(card) {
   return { type: types.FETCH_CARD_SUCCESS, card };
 }
 
-export function updateCardSuccess(updatedCard) {
-  return {type: types.UPDATE_CARD_SUCCESS, updatedCard};
+export function updateCardSuccess(updatedCard, action) {
+  return {type: types.UPDATE_CARD_SUCCESS, updatedCard, action};
 }
 export function deleteCardSuccess(CardId) {
   return {type: types.DELETE_CARD_SUCCESS, CardId};
@@ -40,8 +40,8 @@ export const updateCard = (card, callback) => {
   console.log( "dispatched", card)
   return function(dispatch) {
     apiClient.updateCard(card, updatedCard => {
-      console.log(updatedCard);
-      dispatch(updateCardSuccess(updatedCard));
+      const {card, action} = updatedCard
+      dispatch(updateCardSuccess(card, action));
       if (callback) {
         callback()
       }
